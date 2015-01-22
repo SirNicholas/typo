@@ -175,6 +175,8 @@ end
 Factory.define :category do |c|
   c.name {Factory.next(:category)}
   c.permalink {Factory.next(:category)}
+  c.description 'Typo category description'
+  c.keywords 'features'
   c.position 1
 end
 

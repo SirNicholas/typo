@@ -1,7 +1,7 @@
 class Admin::CategoriesController < Admin::BaseController
   cache_sweeper :blog_sweeper
 
-  before_filter :categories, only: [:new, :edit]
+  before_filter :categories, only: [:new, :edit, :index, :create]
 
   def index; redirect_to :action => 'new' ; end
   def edit
@@ -20,14 +20,26 @@ class Admin::CategoriesController < Admin::BaseController
     end
   end
 
-  def new 
-    respond_to do |format|
-      format.html {
-        @category = Category.new
-      }
-      format.js {
-        @category = Category.new
-      }
+  def new
+    @category = Category.new
+    respond_to :html, :js
+  end
+
+  def create
+    @category = Category.new(params[:category])
+
+    if @category.save
+      respond_to do |format|
+        format.html { save_category }
+        format.js do
+          @category.save
+          @article = Article.new
+          @article.categories << @category
+          return render(:partial => 'admin/content/categories')
+        end
+      end
+    else
+      render 'new'
     end
   end
 

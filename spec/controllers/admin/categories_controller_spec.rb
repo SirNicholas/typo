@@ -16,13 +16,36 @@ describe Admin::CategoriesController do
     assert_response :redirect, :action => 'index'
   end
 
-  describe "test_edit" do
-    before(:each) do
-      get :edit, :id => Factory(:category).id
+  describe 'test_new' do
+    before do
+      get :new
     end
 
     it 'should render template new' do
       assert_template 'new'
+      assert_tag :tag => "table",
+                 :attributes => { :id => "category_container" }
+    end
+  end
+
+  describe 'test_create' do
+    let!(:category) do
+      FactoryGirl.build(:category).attributes
+    end
+
+    it 'should create category' do
+      post :create, category: category
+      assigns[:category].should == Category.find_by_name(category['name'])
+    end
+  end
+
+  describe "test_edit", pending: false do
+    before(:each) do
+      get :edit, :id => Factory(:category).id
+    end
+
+    it 'should render template edit' do
+      assert_template 'edit'
       assert_tag :tag => "table",
         :attributes => { :id => "category_container" }
     end

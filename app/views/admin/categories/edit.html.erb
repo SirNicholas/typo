@@ -1,0 +1,5 @@
+<% @page_heading = _("Categories") %>
+
+<%= render partial: 'form', locals: {category: {:action=>"edit", :id => @category.id}} %>
+
+<%= render partial: 'categories' %>
